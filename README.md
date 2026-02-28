@@ -1,32 +1,29 @@
-# 锵锵三人行字幕生成系统
+# Qwen3 Web Demo
 
-🎬 自动下载《锵锵三人行》节目并生成中文字幕的 Python 工具集
-
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://python.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+🤖 Qwen3 大模型 Web 交互演示 - 基于 Flask 的可视化聊天界面
 
 ---
 
 ## 📖 项目简介
 
-本项目用于从 YouTube 下载《锵锵三人行》节目视频，使用 OpenAI Whisper 或其他 ASR 引擎自动生成中文字幕（SRT 格式）。
+本项目是一个基于 Flask 的 Web 应用，用于演示和交互 Qwen3 大语言模型。提供美观的前端界面，支持实时对话、参数调节和响应可视化。
 
 **核心功能**:
-- 🔍 自动搜索指定年份的节目视频
-- 🧹 智能去重，按日期保留最佳版本
-- ⬇️ 下载音频（仅用于转录，节省空间）
-- 🎙️ ASR 转录生成 SRT 字幕
-- 📊 处理进度和统计报告
+- 💬 实时对话交互
+- 🎨 可视化响应展示
+- ⚙️ 模型参数调节（温度、top-p、max_tokens 等）
+- 🖼️ 支持多模态输入（文本 + 图像）
+- 📊 对话历史管理
 
 ---
 
 ## ✨ 功能特性
 
-- **多 ASR 后端支持**: 本地 Whisper / Faster-Whisper / Groq API
-- **智能去重**: 按播出日期去重，优先选择高清完整版
-- **断点续传**: 支持中断后继续处理
-- **日志记录**: 完整的处理日志
-- **CPU 优化**: 支持 CPU 推理，无需 GPU
+- **流式输出**: 实时显示模型生成的内容
+- **参数可调**: 温度、重复惩罚、生成长度等
+- **对话管理**: 保存、加载、清空对话历史
+- **响应可视化**: 思考过程、置信度展示
+- **移动端适配**: 支持手机访问
 
 ---
 
@@ -35,188 +32,79 @@
 ### 1. 安装依赖
 
 ```bash
-# 克隆项目
-git clone <repository-url>
-cd qiangqiang-asr
-
-# 安装 Python 依赖
 pip install -r requirements.txt
-
-# 安装系统依赖（Ubuntu/Debian）
-sudo apt-get update
-sudo apt-get install -y ffmpeg
-
-# 安装 yt-dlp
-pip install -U yt-dlp
 ```
 
-### 2. 配置环境变量（可选）
+### 2. 配置模型
 
-如果使用 Groq API 版本:
+下载 Qwen3 模型或配置 API 密钥:
 
 ```bash
-export GROQ_API_KEY='gsk_your_api_key_here'
+# 本地模型路径（可选）
+export QWEN3_MODEL_PATH="/path/to/qwen3-model"
+
+# 或使用 API
+export API_KEY="your-api-key"
 ```
 
-### 3. 运行
+### 3. 启动服务
 
 ```bash
-# 使用重构版（推荐）
-python qiangqiang_cpu_refactored.py 2016
-
-# 限制处理数量（测试用）
-python qiangqiang_cpu_refactored.py 2016 --limit 5
-
-# 更换模型
-python qiangqiang_cpu_refactored.py 2016 --model large-v3
-
-# 使用 Groq API
-python qiangqiang_groq.py 2016
+python qwen3_web_demo.py
 ```
+
+访问 http://localhost:5000
 
 ---
 
 ## 📁 文件说明
 
-| 文件 | 说明 | 推荐度 |
-|------|------|--------|
-| `qiangqiang_cpu_refactored.py` | **推荐主版本**，面向对象设计，类型注解完整 | ⭐⭐⭐⭐⭐ |
-| `qiangqiang_groq.py` | Groq API 版本，云端快速处理 | ⭐⭐⭐⭐ |
-| `qiangqiang_pipeline.py` | 生产级 Whisper 版本 | ⭐⭐⭐⭐ |
-| `qiangqiang_final.py` | 多后端支持的流水线 | ⭐⭐⭐ |
+| 文件 | 说明 |
+|------|------|
+| `qwen3_web_demo.py` | 主程序，Flask Web 服务 |
+| `qwen3_visualization_ideas.md` | 可视化设计文档 |
+| `requirements.txt` | Python 依赖 |
+
+---
+
+## 🎨 界面预览
+
+- 简洁现代的聊天界面
+- 支持 Markdown 渲染
+- 代码高亮显示
+- 响应式布局
 
 ---
 
 ## ⚙️ 配置选项
 
-### Whisper 模型选择
-
-| 模型 | 准确率 | 速度 | 推荐场景 |
-|------|--------|------|----------|
-| `tiny` | 低 | 极快 | 测试 |
-| `base` | 中 | 快 | 快速预览 |
-| `small` | 中高 | 中等 | 平衡选择 |
-| `medium` | 高 | 较慢 | 推荐 |
-| `large-v3` | 最高 | 慢 | 最终版本 |
-
-### 常用参数
-
-```bash
-# 处理指定年份
-python qiangqiang_cpu_refactored.py 2016
-
-# 限制处理数量
-python qiangqiang_cpu_refactored.py 2016 --limit 10
-
-# 选择模型
-python qiangqiang_cpu_refactored.py 2016 --model medium
-
-# 只列出视频，不下载
-python qiangqiang_pipeline.py 2016 --list-only
-```
-
----
-
-## 📂 输出结构
-
-```
-qiangqiang_subtitles/
-├── 2016/
-│   ├── metadata.json          # 视频元数据
-│   ├── 20160101_锵锵三人行.srt
-│   ├── 20160102_锵锵三人行.srt
-│   └── ...
-├── 2017/
-│   └── ...
-└── download.log               # 处理日志
-```
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `temperature` | 采样温度 | 0.7 |
+| `top_p` | 核采样 | 0.9 |
+| `max_tokens` | 最大生成长度 | 2048 |
+| `repetition_penalty` | 重复惩罚 | 1.1 |
 
 ---
 
 ## 💻 系统要求
 
-- **Python**: 3.8 或更高
-- **操作系统**: Linux / macOS / Windows (WSL 推荐)
-- **内存**: 4GB+ (推荐 8GB)
-- **磁盘空间**: 10GB+ (用于临时音频文件)
-- **网络**: 可访问 YouTube
-
-### 可选硬件加速
-
-- **NVIDIA GPU**: 使用 CUDA 加速 Whisper 推理
-- **Apple Silicon**: M1/M2/M3 芯片支持
-
----
-
-## 🔧 常见问题
-
-### Q: 下载速度很慢？
-
-A: YouTube 下载速度受网络环境影响。可以尝试:
-- 使用代理
-- 降低音频质量 (`--audio-quality 48K`)
-
-### Q: 转录准确率不高？
-
-A: 尝试更换更大的模型:
-```bash
-python qiangqiang_cpu_refactored.py 2016 --model large-v3
-```
-
-### Q: 如何处理特定月份？
-
-A: 目前不支持直接按月份筛选，可以:
-1. 运行 `--list-only` 查看视频列表
-2. 编辑生成的 `metadata.json` 删除不需要的条目
-3. 重新运行处理
-
-### Q: 遇到 "Video unavailable" 错误？
-
-A: 该视频可能在您所在地区不可用或被删除。脚本会自动跳过并继续处理其他视频。
+- **Python**: 3.8+
+- **内存**: 4GB+ (本地模型需要更多)
+- **GPU**: 可选，CUDA 支持可加速推理
 
 ---
 
 ## 📋 依赖列表
 
 ```
-faster-whisper>=0.10.0
-yt-dlp>=2023.0.0
-requests>=2.28.0
+flask>=2.3.0
+torch>=2.0.0
+transformers>=4.35.0
 ```
-
-系统依赖:
-- `ffmpeg` (必需)
-- `python3-dev` (编译需要)
-
----
-
-## ⚠️ 免责声明
-
-1. **版权问题**: 《锵锵三人行》节目版权归原制作方所有。本项目仅供个人学习和研究使用，请勿用于商业用途或公开传播。
-2. **YouTube 条款**: 使用本工具需遵守 YouTube 服务条款。
-3. **ASR 准确性**: 自动生成的字幕可能存在错误，建议人工校对后使用。
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
 
 ---
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
-
----
-
-## 🙏 致谢
-
-- [OpenAI Whisper](https://github.com/openai/whisper) - ASR 引擎
-- [Faster-Whisper](https://github.com/SYSTRAN/faster-whisper) - 优化的 Whisper 实现
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube 下载工具
-- [Groq](https://groq.com/) - 云端 AI 推理平台
-
----
-
-**注意**: 本项目为个人学习项目，与《锵锵三人行》制作方无关联。
+MIT License
